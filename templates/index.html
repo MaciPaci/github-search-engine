@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Zadanie 3</title>
+{% endblock %}
+
+{% block body %}
+<div class='RepoList'>
+    <h1>List of repositories</h1>
+
+    <div class="form">
+        <form action="/" method="POST" autocomplete="off">
+            Username: <input type="text" name="username" value="">
+            <input type="submit" value="Get repos">
+        </form>
+    </div>
+
+    {% if error %}
+    <p id="Error">
+        Wrong username
+    </p>
+    {% endif %}
+
+    <h4>
+        Number of stars in all repositories: {{ stars }}
+    </h4>
+
+    <input type="search" id="search" placeholder="Filter by Repo Name" onkeyup="searchFunction()">
+
+    <div class="tableDiv" style="overflow-x:auto;">
+    
+    <table id="repoTable">
+        <thead>
+        <tr>
+            <th class="header"><a href="/sort/1">Repo name</a></th>
+            <th class="header"><a href="/sort/2">Star count</a></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for repo in repos %}
+            <tr>
+                <td>{{ repo.repo_name }}</td>
+                <td>{{ repo.repo_starcount }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        window.onscroll = function() {myFunction()};
+        
+        var header = document.getElementById("tableHeader");
+        var sticky = header.offsetTop;
+        
+        function myFunction() {
+          if (window.pageYOffset > sticky) {
+            header.classList.add("sticky");
+          } else {
+            header.classList.remove("sticky");
+          }
+        }
+    </script>
+        
+    <script>
+        function searchFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("repoTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+            }       
+        }
+        }
+    </script>
+
+    </div>
+
+</div>
+{% endblock %}
